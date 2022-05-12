@@ -58,7 +58,7 @@ public class MenuServlet extends HttpServlet {
 		
 		// 4. 응답 메세지 JSP 위임
 		request.setAttribute("totalPrice", totalPrice);
-		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/menu/menuResult.jsp");
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/menu/menuEnd.jsp");
 		reqDispatcher.forward(request, response);
 	}
 
