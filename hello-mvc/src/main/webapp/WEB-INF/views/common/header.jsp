@@ -12,7 +12,7 @@
 	Cookie[] cookies = request.getCookies();
 	if(cookies != null){
 		for(Cookie cookie : cookies){
-			System.out.println("Cookie{" + cookie.getName() + "=" + cookie.getValue() + "}");
+			System.out.println("Cookie {" + cookie.getName() + "=" + cookie.getValue() + "}");
 		}
 	} else {
 			System.out.println("> 이번 요청에 전달된 cookie가 없습니다.");
