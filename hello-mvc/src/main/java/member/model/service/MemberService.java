@@ -26,4 +26,27 @@ public class MemberService {
 		return member;
 	}
 
+	/**
+	 * 1. Connection객체 생성
+	 * 2. dao요청
+	 * 3. 트랜잭션 처리
+	 * 4. Connection객체 반환 
+	 */
+	public int insertMember(Member member) {
+		int result = 0;
+		
+		Connection conn = getConnection();
+		try {
+			result = memberDao.insertMember(conn, member);
+			commit(conn);
+		} catch(Exception e) {
+			rollback(conn);
+			throw e; // controller에게 통보용!
+		} finally {
+			close(conn);
+		}
+		
+		return result;
+	}
+
 }

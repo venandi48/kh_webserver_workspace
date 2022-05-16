@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import member.model.dto.Member;
 import member.model.dto.MemberRole;
+import member.model.exception.MemberException;
 
 public class MemberDao {
 
@@ -19,7 +20,7 @@ public class MemberDao {
 	public MemberDao() {
 		// buildpath의 sql/member-query.properties 파일의 내용 불러오기
 		String fileName = MemberDao.class.getResource("/sql/member-query.properties").getPath();
-		System.out.println("fileName@MemberDao = " + fileName);
+//		System.out.println("fileName@MemberDao = " + fileName);
 
 		try {
 			prop.load(new FileReader(fileName));
@@ -67,6 +68,34 @@ public class MemberDao {
 		}
 
 		return member;
+	}
+
+	public int insertMember(Connection conn, Member member) {
+		String sql = prop.getProperty("insertMember");
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member.getMemberId());
+			pstmt.setString(2, member.getPassword());
+			pstmt.setString(3, member.getMemberName());
+			pstmt.setString(4, member.getMemberRole().toString());
+			pstmt.setString(5, member.getGender());
+			pstmt.setDate(6, member.getBirthday());
+			pstmt.setString(7, member.getEmail());
+			pstmt.setString(8, member.getPhone());
+			pstmt.setString(9, member.getAddress());
+			pstmt.setString(10, member.getHobby());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new MemberException("회원가입오류", e);
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }

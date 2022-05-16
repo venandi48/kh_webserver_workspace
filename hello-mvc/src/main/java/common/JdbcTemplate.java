@@ -29,7 +29,7 @@ public class JdbcTemplate {
 			// buildpath의 datasource.properties 참조하기
 			// getResource의 /(슬래시)는 buildpath(/WEB-INF/classes)
 			String fileName = JdbcTemplate.class.getResource("/datasource.properties").getPath();
-			System.out.println("fileName@JdbcTemplate = " + fileName);
+			// System.out.println("fileName@JdbcTemplate = " + fileName);
 			prop.load(new FileReader(fileName));
 			
 			driverClass = prop.getProperty("driverClass");

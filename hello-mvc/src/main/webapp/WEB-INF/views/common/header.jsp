@@ -9,13 +9,17 @@
 	if(msg != null)
 			session.removeAttribute("msg");
 	
+	String saveId = null; // 아이디 저장을 체크한 경우
 	Cookie[] cookies = request.getCookies();
 	if(cookies != null){
 		for(Cookie cookie : cookies){
 			System.out.println("Cookie {" + cookie.getName() + "=" + cookie.getValue() + "}");
+			if("saveId".equals(cookie.getName())){
+				saveId = cookie.getValue();
+			}
 		}
 	} else {
-			System.out.println("> 이번 요청에 전달된 cookie가 없습니다.");
+			// System.out.println("> 이번 요청에 전달된 cookie가 없습니다.");
 	}
 %>
 <!DOCTYPE html>
@@ -63,7 +67,7 @@ window.onload = () => {
 		        <form id="loginFrm" name="loginFrm" method="POST" action="<%= request.getContextPath() %>/member/login">
 		            <table>
 		                <tr>
-		                    <td><input type="text" name="memberId" id="memberId" placeholder="아이디" tabindex="1"></td>
+		                    <td><input type="text" name="memberId" id="memberId" placeholder="아이디" tabindex="1" value="<%= saveId != null ? saveId : "" %>"></td>
 		                    <td><input type="submit" value="로그인" tabindex="3"></td>
 		                </tr>
 		                <tr>
@@ -72,9 +76,9 @@ window.onload = () => {
 		                </tr>
 		                <tr>
 		                    <td colspan="2">
-		                        <input type="checkbox" name="saveId" id="saveId" />
+		                        <input type="checkbox" name="saveId" id="saveId" <%= saveId != null ? "checked" : "" %>/>
 		                        <label for="saveId">아이디저장</label>&nbsp;&nbsp;
-		                        <input type="button" value="회원가입">
+		                        <input type="button" value="회원가입" onclick="location.href='<%= request.getContextPath() %>/member/memberEnroll';">
 		                    </td>
 		                </tr>
 		            </table>
