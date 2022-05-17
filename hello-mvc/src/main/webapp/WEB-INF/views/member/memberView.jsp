@@ -100,11 +100,11 @@
 	</form>
 </section>
 <script>
-/*
-const updateMember = () => {
-	document.memberUpdateFrm.submit();
+
+const deleteMember = () => {
+	location.href="<%= request.getContextPath() %>/member/memberDelete";
 };
-*/
+
 
 /**
  * 회원수정폼 유효성 검사

@@ -37,8 +37,7 @@ public class MemberEnrollServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			// 1. 인코딩
-			request.setCharacterEncoding("utf-8");
+			// 1. 인코딩처리 -> filter에서 처리
 			
 			// 2. 사용자입력값 처리
 			String memberId = request.getParameter("memberId");

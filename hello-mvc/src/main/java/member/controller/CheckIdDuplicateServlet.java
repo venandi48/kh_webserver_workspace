@@ -23,8 +23,7 @@ public class CheckIdDuplicateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 1. 인코딩처리
-		request.setCharacterEncoding("utf-8");
+		// 1. 인코딩처리 -> filter에서 처리
 		
 		// 2. 사용자입력값 처리
 		String memberId = request.getParameter("memberId");
