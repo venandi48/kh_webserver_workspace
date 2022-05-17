@@ -55,7 +55,7 @@ values (
     'admin@naver.com', '01056785678', '서울시 관악구', '게임,독서', default
 );
 
-select * from member;
+
 commit;
 
 
@@ -64,10 +64,12 @@ values (
     'yoogs', '1234', '유관순', 'U', 'M', null,
     null, '01019950408', null, 'null', default
 );
---delete from
---    member
---where
---    member_id = 'dmswl';
+--delete from member
+--where member_id = 'dmswl';
+
+update member
+set password = 'kvOffyqGmDjNUIXm8X/IIQm8+YzWKkfLw3njjegLvAITojzubkoT3myq4K3Yo5AnLW8Ig8J0Mgsf9g28/G3XUA=='
+where member_id = 'admin';
 
 
-
+select * from member;

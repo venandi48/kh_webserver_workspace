@@ -39,13 +39,32 @@ public class MemberService {
 		try {
 			result = memberDao.insertMember(conn, member);
 			commit(conn);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			rollback(conn);
 			throw e; // controller에게 통보용!
 		} finally {
 			close(conn);
 		}
-		
+
+		return result;
+	}
+	
+	public int updateMember(Member member) {
+		int result = 0;
+		// 1. Connection객체 생성
+		Connection conn = getConnection();
+		try {
+			// 2. dao 요청
+			result = memberDao.updateMember(conn, member);
+			// 3. 트랜잭션 처리
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e; // controller에게 통보용
+		} finally {
+			// 4. Connection객체 반환
+			close(conn);
+		}
 		return result;
 	}
 

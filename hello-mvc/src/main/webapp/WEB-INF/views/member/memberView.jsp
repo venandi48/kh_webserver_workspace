@@ -25,7 +25,7 @@
 %>
 <section id=enroll-container>
 	<h2>회원 정보</h2>
-	<form name="memberUpdateFrm" method="post">
+	<form name="memberUpdateFrm" method="post" action="<%= request.getContextPath() %>/member/memberUpdate">
 		<table>
 			<tr>
 				<th>아이디<sup>*</sup></th>
@@ -33,7 +33,7 @@
 					<input type="text" name="memberId" id="memberId" value="<%= memberId %>" readonly>
 				</td>
 			</tr>
-			<tr>
+			<%-- <tr>
 				<th>패스워드<sup>*</sup></th>
 				<td>
 					<input type="password" name="password" id="password" value="<%= password %>" required>
@@ -45,7 +45,7 @@
 					<input type="password" id="passwordCheck" value="<%= password %>" required><br>
 				</td>
 			</tr> 
-			<tr>
+			<tr> --%>
 				<th>이름<sup>*</sup></th>
 				<td>	
 				<input type="text"  name="memberName" id="memberName" value="<%= memberName %>"  required><br>
@@ -95,9 +95,35 @@
 				</td>
 			</tr>
 		</table>
-        <input type="button" onclick="updateMember();" value="정보수정"/>
+        <input type="submit" value="정보수정"/>
         <input type="button" onclick="deleteMember();" value="탈퇴"/>
 	</form>
 </section>
+<script>
+/*
+const updateMember = () => {
+	document.memberUpdateFrm.submit();
+};
+*/
+
+/**
+ * 회원수정폼 유효성 검사
+ */
+document.memberUpdateFrm.onsubmit = () => {
+	
+	// memberName
+	if(!/^[가-힣]{2,}$/.test(memberName.value)){
+		alert("이름은 한글 2글자이상 입력해주세요.");
+		return false;
+	}
+	
+	// phone
+	if(!/^010\d{8}$/.test(phone.value)){
+		alert("유효한 전화번호를 입력하세요.");
+		return false;
+	}
+};
+
+</script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

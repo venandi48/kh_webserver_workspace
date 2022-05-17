@@ -23,17 +23,10 @@ public class MemberViewServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Member loginMember = (Member) session.getAttribute("loginMember");
-		if(loginMember != null) {
-			// 응답처리
-			RequestDispatcher reqDispatcher = request.getRequestDispatcher("/WEB-INF/views/member/memberView.jsp");
-			reqDispatcher.forward(request, response);
-			
-		} else {
-			response.sendRedirect(request.getContextPath() + "/");
-		}
-		
+		// filter에서 로그인 여부 체크
+
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/WEB-INF/views/member/memberView.jsp");
+		reqDispatcher.forward(request, response);
 	}
 
 }

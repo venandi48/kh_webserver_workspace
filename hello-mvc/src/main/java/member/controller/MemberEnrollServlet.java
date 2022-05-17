@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.HelloMvcUtils;
 import member.model.dto.Member;
 import member.model.dto.MemberRole;
 import member.model.service.MemberService;
@@ -20,6 +21,7 @@ import member.model.service.MemberService;
 public class MemberEnrollServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MemberService memberService = new MemberService();
+	
 
 	/**
 	 * 회원가입폼 요청
@@ -40,7 +42,8 @@ public class MemberEnrollServlet extends HttpServlet {
 			
 			// 2. 사용자입력값 처리
 			String memberId = request.getParameter("memberId");
-			String password = request.getParameter("password");
+			// 단방향 암호화 처리
+			String password = HelloMvcUtils.encrypt(request.getParameter("password"), memberId);
 			String memberName = request.getParameter("memberName");
 			String gender = request.getParameter("gender");
 			String email = request.getParameter("email");
