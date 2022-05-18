@@ -122,7 +122,7 @@ document.memberEnrollFrm.onsubmit = () => {
 	// _password
 	// 영문자/숫자/특수문자 !@#$%^&*
 	if(!/^[a-zA-Z0-9!@#$%^&*]{4,}$/.test(_password.value)){
-		alert("아이디는 영문자/숫자/특수문자!@#$%^&* 로 4글자 이상이어야 합니다.");
+		alert("비밀번호는 영문자/숫자/특수문자!@#$%^&* 로 4글자 이상이어야 합니다.");
 		return false;
 	}
 	if(!passwordCheck.onblur()){

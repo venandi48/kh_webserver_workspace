@@ -21,7 +21,8 @@ import member.model.dto.Member;
 @WebFilter({ 
 	"/member/memberView", 
 	"/member/memberUpdate", 
-	"/member/memberDelete" 
+	"/member/memberDelete", 
+	"/member/passwordUpdate" 
 })
 
 public class LoginFilter implements Filter {

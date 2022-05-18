@@ -96,13 +96,23 @@
 			</tr>
 		</table>
         <input type="submit" value="정보수정"/>
+        <input type="button" value="비밀번호수정" onclick="location.href='<%= request.getContextPath() %>/member/passwordUpdate';"/>
         <input type="button" onclick="deleteMember();" value="탈퇴"/>
 	</form>
 </section>
+<!-- 회원탈퇴폼 : POST /member/memberDelete 전송을 위해 시각화되지 않는 폼태그 이용 -->
+<form 
+	name="memberDelFrm" 
+	action="<%= request.getContextPath() %>/member/memberDelete" 
+	method="POST">
+	<input type="hidden" name="memberId" value="<%= loginMember.getMemberId() %>" />
+</form>
 <script>
 
 const deleteMember = () => {
-	location.href="<%= request.getContextPath() %>/member/memberDelete";
+	if(confirm("정말로 탈퇴하시겠습니까?")){
+		document.memberDelFrm.submit();
+	}
 };
 
 
