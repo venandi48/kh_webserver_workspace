@@ -2,10 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@page import="member.model.dto.Member"%>
 <%
 	List<Member> list = (List<Member>) request.getAttribute("list");
-	// System.out.println("memberList.jsp@list = " + list);
 %>
 <!-- 관리자용 admin.css link -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admin.css" />
@@ -108,6 +108,40 @@
 	<input type="hidden" name="memberRole" />
 </form>
 <script>
+
+(() => {
+<%
+	String searchType = request.getParameter("searchType");
+	String searchKeyword = request.getParameter("searchKeyword");
+	
+	if(searchType != null && searchKeyword != null){
+%>
+
+		document.querySelectorAll(".search-type").forEach((div) => {
+			div.style.display = "none";
+		});
+		let id = "";
+		switch("<%= searchType %>"){
+			case "member_id": id = "search-memberId"; break;
+			case "member_name": id = "search-memberName"; break;
+			case "gender": id = "search-gender"; break;
+		}
+		const option = document.querySelector("#searchType [value=<%= searchType %>]");
+		option.selected = true;
+		
+		const target = document.querySelector(`#\${id}`);
+		target.style.display = "inline-block";
+		
+		if("<%= searchType %>" == "gender" && "<%= searchKeyword %>" != "M"){
+			target.querySelector("[value=F]").checked = true;
+		} else{
+			target.querySelector("[name=searchKeyword]").value = "<%= searchKeyword %>";
+		}
+<%
+	}
+%>
+})();
+
 searchType.addEventListener('change', (e) => {
 	const {value} = e.target; // 구조분해할당
 	console.log(value);
