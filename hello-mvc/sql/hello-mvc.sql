@@ -65,11 +65,83 @@ values (
     null, '01019950408', null, 'null', default
 );
 --delete from member
---where member_id = 'dmswl';
+--where member_id = 'abcd';
 
-update member
-set password = 'kvOffyqGmDjNUIXm8X/IIQm8+YzWKkfLw3njjegLvAITojzubkoT3myq4K3Yo5AnLW8Ig8J0Mgsf9g28/G3XUA=='
-where member_id = 'admin';
+
+-- pw 1234로 변경
+--update member
+--set password = 'kvOffyqGmDjNUIXm8X/IIQm8+YzWKkfLw3njjegLvAITojzubkoT3myq4K3Yo5AnLW8Ig8J0Mgsf9g28/G3XUA=='
+--where member_id = 'admin';
+
+
+
+
 
 
 select * from member;
+select count(*) from member;
+
+
+
+-- 페이징쿼리
+-- 1. rownum
+-- 2. row_number
+
+select *
+from(
+    select
+        row_number() over(order by enroll_date desc) rnum,
+        m.*
+    from
+        member m)m
+where
+    rnum between 1 and 10;
+
+-- select * from( select row_number() over(order by enroll_date desc) rnum, m.* from member m)m where rnum between ? and ?
+
+/*
+    1페이지당 표시할 컨텐츠 : 10건 --> content 영역
+    ------------------------------------
+    1page : 1 ~ 10
+    2page : 11 ~ 20
+    3page : 21 ~ 30
+    ...
+    11page : 101 ~ 110
+    12page : 111 ~ 120
+*/
+
+
+-- 게시판
+
+create table board (
+    no number,
+    title varchar2(100) not null,
+    member_id varchar2(20),
+    content varchar2(4000) not null,
+    read_count number default 0,
+    reg_date date default sysdate,
+    
+    constraint pk_board primary key(no),
+    constraint fk_board_member_id foreign key(member_id) references member(member_id) on delete set null
+);
+
+create sequence seq_board_no;
+
+create table attachment (
+    no number,
+    board_no number not null,
+    original_filename varchar2(255) not null,  -- 업로드한 파일명
+    renamed_filename varchar2(255) not null, -- 저장된 파일명
+    reg_date date default sysdate,
+    
+    constraint pk_attachment_no primary key(no),
+    constraint fk_attachment_board_no foreign key(board_no) references board(no) on delete cascade
+);
+
+create sequence seq_attachment_no;
+
+-- 샘플 데이터 추가하기
+
+
+select * from board;
+select * from attachment;

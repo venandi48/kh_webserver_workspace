@@ -6,6 +6,7 @@
 <%@page import="member.model.dto.Member"%>
 <%
 	List<Member> list = (List<Member>) request.getAttribute("list");
+	String pagebar = (String) request.getAttribute("pagebar");
 
 	String searchType = request.getParameter("searchType");
 	String searchKeyword = request.getParameter("searchKeyword");
@@ -102,6 +103,9 @@
 		
 		</tbody>
 	</table>
+	<div id="pagebar">
+		<%= pagebar %>
+	</div>
 </section>
 <form 
 	action="<%=request.getContextPath()%>/admin/memberRoleUpdate"
