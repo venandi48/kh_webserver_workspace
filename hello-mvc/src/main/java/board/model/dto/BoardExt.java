@@ -1,23 +1,17 @@
 package board.model.dto;
 
-import java.sql.Date;
+import java.util.List;
 
 public class BoardExt extends Board {
 	private int attachCount;
+	private List<Attachment> attachments;
 
-	public BoardExt() {
-		super();
-		// TODO Auto-generated constructor stub
+	public List<Attachment> getAttachments() {
+		return attachments;
 	}
 
-	public BoardExt(int no, String title, String memberId, String content, int readCount, Date regDate) {
-		super(no, title, memberId, content, readCount, regDate);
-		// TODO Auto-generated constructor stub
-	}
-
-	public BoardExt(int attachCount) {
-		super();
-		this.attachCount = attachCount;
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
 	}
 
 	public int getAttachCount() {
@@ -30,7 +24,7 @@ public class BoardExt extends Board {
 
 	@Override
 	public String toString() {
-		return "BoardExt [no=" + getNo() + ", title=" + getTitle() + ", memberId=" + getMemberId() + ", attachCount=" + attachCount + "]";
+		return "BoardExt [attachCount=" + attachCount + ", attachments=" + attachments + super.toString() + "]";
 	}
 
 }

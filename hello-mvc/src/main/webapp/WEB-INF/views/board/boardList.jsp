@@ -10,6 +10,9 @@ String pagebar = (String) request.getAttribute("pagebar");
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/board.css" />
 <section id="board-container">
 	<h2>게시판 </h2>
+<% 	if(loginMember != null) { %>
+	<input type="button" value="글쓰기" id="btn-add" onclick="location.href='<%= request.getContextPath() %>/board/boardEnroll';" />
+<% 	} %>
 	<table id="tbl-board">
 		<thead>
 			<tr>
@@ -25,8 +28,7 @@ String pagebar = (String) request.getAttribute("pagebar");
 		
 <%
 		if(list != null && !list.isEmpty()){
-			for(int i = 0; i < list.size() ; i++){
-				BoardExt boardExt = list.get(i);
+			for(BoardExt boardExt : list){
 %>
 			<tr>
 				<td><%= boardExt.getNo() %></td>

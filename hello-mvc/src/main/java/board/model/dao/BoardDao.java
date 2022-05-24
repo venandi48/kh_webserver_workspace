@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import board.model.dto.Attachment;
+import board.model.dto.Board;
 import board.model.dto.BoardExt;
 import board.model.exception.BoardException;
 
@@ -43,7 +44,7 @@ public class BoardDao {
 			pstmt.setInt(2, (int) param.get("end"));
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
-				BoardExt board = handleBoardResultSet(conn, rset);
+				BoardExt board = handleBoardResultSet(rset);
 				list.add(board);
 			}
 		} catch (Exception e) {
@@ -56,19 +57,16 @@ public class BoardDao {
 		return list;
 	}
 
-	private BoardExt handleBoardResultSet(Connection conn, ResultSet rset) throws SQLException {
+	private BoardExt handleBoardResultSet(ResultSet rset) throws SQLException {
 		BoardExt board = new BoardExt();
 
-		int boardNo = rset.getInt("no");
-		board.setNo(boardNo);
+		board.setNo(rset.getInt("no"));
 		board.setTitle(rset.getString("title"));
 		board.setMemberId(rset.getString("member_id"));
 		board.setContent(rset.getString("content"));
 		board.setReadCount(rset.getInt("read_count"));
 		board.setRegDate(rset.getDate("reg_date"));
-
-		List<Attachment> attachment = findAttachmentByBoardNo(conn, boardNo);
-		board.setAttachCount(attachment.size());
+		board.setAttachCount(rset.getInt("attach_cnt"));
 
 		return board;
 	}
@@ -95,41 +93,67 @@ public class BoardDao {
 		return totalContents;
 	}
 
-	public List<Attachment> findAttachmentByBoardNo(Connection conn, int boardNo) {
+	public int insertBoard(Connection conn, Board board) {
+		int result = 0;
 		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		List<Attachment> list = new ArrayList<Attachment>();
-		String sql = prop.getProperty("findAttachmentByBoardNo");
+		String sql = prop.getProperty("insertBoard");
 
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNo);
+			pstmt.setString(1, board.getTitle());
+			pstmt.setString(2, board.getMemberId());
+			pstmt.setString(3, board.getContent());
+
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new BoardException("게시글 등록 오류!", e);
+		} finally {
+			close(pstmt);
+		}
+
+		return result;
+	}
+
+	public int findCurrentBoardNo(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		int no = 0;
+		String sql = prop.getProperty("findCurrentBoardNo");
+
+		try {
+			pstmt = conn.prepareStatement(sql);
 			rset = pstmt.executeQuery();
 
-			while (rset.next()) {
-				Attachment attach = handleAttachResultSet(rset);
-				list.add(attach);
-			}
+			while (rset.next())
+				no = rset.getInt(1);
+
 		} catch (Exception e) {
-			throw new BoardException("boardNo일치 첨부파일 조회 오류!", e);
+			throw new BoardException("게시글 번호 조회 오류!", e);
 		} finally {
 			close(rset);
 			close(pstmt);
 		}
-
-		return list;
+		return no;
 	}
 
-	private Attachment handleAttachResultSet(ResultSet rset) throws SQLException {
-		Attachment attach = new Attachment();
+	public int insertAttachment(Connection conn, Attachment attach) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertAttachment");
 
-		attach.setNo(rset.getInt("no"));
-		attach.setBoardNo(rset.getInt("board_no"));
-		attach.setOriginalFileName(rset.getString("original_filename"));
-		attach.setRenamedFileName(rset.getString("renamed_filename"));
-		attach.setRegDate(rset.getDate("reg_date"));
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, attach.getBoardNo());
+			pstmt.setString(2, attach.getOriginalFileName());
+			pstmt.setString(3, attach.getRenamedFileName());
 
-		return attach;
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new BoardException("첨부파일 등록 오류!", e);
+		} finally {
+			close(pstmt);
+		}
+		return result;
 	}
 
 }

@@ -37,7 +37,7 @@ public class BoardListServlet extends HttpServlet {
 			} catch (NumberFormatException e) {
 				// 예외발생시 현재페이지는 1
 			}
-			
+
 			Map<String, Object> param = new HashMap<>();
 			int start = (cPage - 1) * numPerPage + 1;
 			int end = cPage * numPerPage;
