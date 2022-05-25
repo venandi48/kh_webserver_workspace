@@ -99,4 +99,29 @@ public class BoardService {
 		return attach;
 	}
 
+	public int deleteBoard(int no) {
+		int result = 0;
+		Connection conn = getConnection();
+
+		try {
+			result = boardDao.deleteBoard(conn, no);
+
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+
+		return result;
+	}
+
+	public List<Attachment> findAttachmentByBoardNo(int no) {
+		Connection conn = getConnection();
+		List<Attachment> attachments = boardDao.findAttachmentByBoardNo(conn, no);
+		close(conn);
+		return attachments;
+	}
+
 }

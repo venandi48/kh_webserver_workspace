@@ -60,6 +60,12 @@ BoardExt board = (BoardExt) request.getAttribute("board");
 				<input type="button" value="삭제하기" onclick="deleteBoard()">
 			</th>
 		</tr>
+		<form 
+			name="boardDelFrm"
+			action="<%= request.getContextPath() %>/board/boardDelete"
+			method="POST">
+			<input type="hidden" name="no" value="<%= board.getNo() %>" />
+		</form>
 		<script>
 		/**
 		 * POST /board/boardDelete
@@ -68,7 +74,9 @@ BoardExt board = (BoardExt) request.getAttribute("board");
 		 *  - 서버에 저장된 파일 삭제 : java.io.File 활용
 		 */
 		const deleteBoard = () => {
-			
+			if(confirm("게시글을 삭제하시겠습니까?")){
+				document.boardDelFrm.submit();
+			}
 		};
 		</script>
 <%
