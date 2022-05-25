@@ -46,7 +46,7 @@ public class BoardListServlet extends HttpServlet {
 
 			// 2. 업무로직
 			List<BoardExt> list = boardService.findAll(param);
-			System.out.println(list);
+//			System.out.println(list);
 
 			int totalContents = boardService.getTotalContents();
 			String url = request.getRequestURI();

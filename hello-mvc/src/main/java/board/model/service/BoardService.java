@@ -6,6 +6,7 @@ import static common.JdbcTemplate.getConnection;
 import static common.JdbcTemplate.rollback;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,10 @@ public class BoardService {
 		return totalContents;
 	}
 
+	/**
+	 * Transaction
+	 *  - all or none
+	 */
 	public int insertBoard(Board board) {
 		int result = 0;
 		Connection conn = getConnection();
@@ -61,6 +66,37 @@ public class BoardService {
 			close(conn);
 		}
 		return result;
+	}
+
+	public BoardExt findByNo(int no) {
+		Connection conn = getConnection();
+		BoardExt board = boardDao.findByNo(conn, no); // board테이블 조회
+		List<Attachment> attachments = boardDao.findAttachmentByBoardNo(conn, no); // attachment테이블 조회
+		board.setAttachments(attachments);
+		close(conn);
+		return board;
+	}
+
+	public int updateReadCount(int no) {
+		int result = 0;
+		Connection conn = getConnection();
+		try {
+			result = boardDao.updateReadCount(conn, no);
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+		return result;
+	}
+
+	public Attachment findAttachmentByNo(int no) {
+		Connection conn = getConnection();
+		Attachment attach = boardDao.findAttachmentByNo(conn, no);
+		close(conn);
+		return attach;
 	}
 
 }

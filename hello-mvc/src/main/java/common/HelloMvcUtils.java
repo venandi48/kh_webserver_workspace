@@ -75,7 +75,7 @@ public class HelloMvcUtils {
 		while (pageNo <= pagebarEnd && pageNo <= totalPages) {
 			if (pageNo == cPage) {
 				// 현재페이지인 경우
-				pagebar.append("<span class='cPage='>" + pageNo + "</span>");
+				pagebar.append("<span class='cPage'>" + pageNo + "</span>");
 				pagebar.append("\n");
 			} else {
 				// 현재페이지가 아닌 경우(링크필요)

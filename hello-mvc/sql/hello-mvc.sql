@@ -124,8 +124,10 @@ create table board (
     constraint pk_board primary key(no),
     constraint fk_board_member_id foreign key(member_id) references member(member_id) on delete set null
 );
+-- drop table board;
 
 create sequence seq_board_no;
+-- DROP SEQUENCE seq_board_no;
 
 create table attachment (
     no number,
@@ -145,3 +147,5 @@ create sequence seq_attachment_no;
 
 select * from board;
 select * from attachment;
+
+

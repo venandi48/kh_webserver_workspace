@@ -32,7 +32,9 @@ String pagebar = (String) request.getAttribute("pagebar");
 %>
 			<tr>
 				<td><%= boardExt.getNo() %></td>
-				<td><a href="#"><%= boardExt.getTitle() %></a></td>
+				<td>
+					<a href="<%= request.getContextPath() %>/board/boardView?no=<%= boardExt.getNo() %>"><%= boardExt.getTitle() %></a>
+				</td>
 				<td><%= boardExt.getMemberId() %></td>
 				<td><%= boardExt.getRegDate() %></td>
 				<td>

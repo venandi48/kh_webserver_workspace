@@ -58,6 +58,8 @@ public class BoardEnrollServlet extends HttpServlet {
 		ServletContext application = getServletContext();
 		String webRoot = application.getRealPath("/"); // F:\Workspaces\webserver_workspace\hello-mvc\src\main\webapp
 		String saveDirectory = webRoot + "/upload/board";
+		// 위의 세 줄을 한줄로 처리 가능
+		// String saveDirectory = getServletContext().getRealPath("/upload/board");
 		System.out.println("saveDirectory = " + saveDirectory);
 		// 예전 사용법 : File.separator 운영체제별 경로 구분자(window = \, mac/linux: /)
 		// String saveDirectory = webRoot + File.separator +"upload" + File.separator + "board";
