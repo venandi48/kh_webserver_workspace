@@ -6,6 +6,9 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%
 BoardExt board = (BoardExt) request.getAttribute("board");
+boolean canEdit = loginMember != null 
+					&& (loginMember.getMemberId().equals(board.getMemberId()) 
+					|| loginMember.getMemberRole() == MemberRole.A);
 %>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/board.css" />
 <section id="board-container">
@@ -49,9 +52,7 @@ BoardExt board = (BoardExt) request.getAttribute("board");
 			<td><%= board.getContent() %></td>
 		</tr>
 <%
-		if(loginMember != null 
-			&& (loginMember.getMemberId().equals(board.getMemberId()) 
-					|| loginMember.getMemberRole() == MemberRole.A)) {
+		if(canEdit) {
 %>
 		<tr>
 			<%-- 작성자와 관리자만 마지막행 수정/삭제버튼이 보일수 있게 할 것 --%>
@@ -60,28 +61,36 @@ BoardExt board = (BoardExt) request.getAttribute("board");
 				<input type="button" value="삭제하기" onclick="deleteBoard()">
 			</th>
 		</tr>
-		<form 
-			name="boardDelFrm"
-			action="<%= request.getContextPath() %>/board/boardDelete"
-			method="POST">
-			<input type="hidden" name="no" value="<%= board.getNo() %>" />
-		</form>
-		<script>
-		/**
-		 * POST /board/boardDelete
-		 *  - no전송
-		 *  - 알아서 attachment 레코드 삭제되지만(cascade) 서버에는 파일이 남아있음
-		 *  - 서버에 저장된 파일 삭제 : java.io.File 활용
-		 */
-		const deleteBoard = () => {
-			if(confirm("게시글을 삭제하시겠습니까?")){
-				document.boardDelFrm.submit();
-			}
-		};
-		</script>
+		
 <%
 		}	
 %>
 	</table>
 </section>
+
+<% if(canEdit){ %>
+	<form 
+		name="boardDeleteFrm"
+		action="<%= request.getContextPath() %>/board/boardDelete"
+		method="POST">
+		<input type="hidden" name="no" value="<%= board.getNo() %>" />
+	</form>
+	<script>
+	/**
+	 * POST /board/boardDelete
+	 *  - no전송
+	 *  - 알아서 attachment 레코드 삭제되지만(cascade) 서버에는 파일이 남아있음
+	 *  - 서버에 저장된 파일 삭제 : java.io.File 활용
+	 */
+	const deleteBoard = () => {
+		if(confirm("게시글을 삭제하시겠습니까?")){
+			document.boardDeleteFrm.submit();
+		}
+	};
+	
+	const updateBoard = () => {
+		location.href = "<%= request.getContextPath() %>/board/boardUpdate?no=<%= board.getNo() %>";
+	}
+	</script>
+<% } %>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

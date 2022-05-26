@@ -106,7 +106,7 @@ public class BoardEnrollServlet extends HttpServlet {
 		int result = boardService.insertBoard(board);
 
 		// 5. 리다이렉트
-		response.sendRedirect(request.getContextPath() + "/board/boardList");
+		response.sendRedirect(request.getContextPath() + "/board/boardView?no=" + board.getNo());
 	}
 
 	private Attachment getAttachment(MultipartRequest multiReq, String name) {

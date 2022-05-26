@@ -145,7 +145,7 @@ create sequence seq_attachment_no;
 -- 샘플 데이터 추가하기
 
 
-select * from board;
+select * from board order by no desc;
 select * from attachment;
 
 

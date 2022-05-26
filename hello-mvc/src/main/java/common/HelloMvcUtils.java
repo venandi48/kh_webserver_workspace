@@ -1,10 +1,21 @@
 package common;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
+import board.model.dto.Attachment;
 
 public class HelloMvcUtils {
 	
@@ -95,4 +106,29 @@ public class HelloMvcUtils {
 
 		return pagebar.toString();
 	}
+	
+	public static void fileDownload(HttpServletResponse response, String saveDirectory, String originalFilename,
+			String renamedFilename) throws UnsupportedEncodingException, IOException, FileNotFoundException {
+
+		response.setContentType("application/octet-stream"); // 응답데이터 타입 - 이진데이터
+		// Content-Disposition 첨부파일인 경우, 브라우저 다운로드(Save as)처리 명시
+		String resFilename = new String(originalFilename.getBytes("utf-8"), "iso-8859-1"); // tomcat 기본인코딩
+		response.setHeader("Content-Disposition", "attachment;filename=" + resFilename);
+		System.out.println(resFilename);
+
+		// 파일을 읽어서(input) 응답메세지에 쓰기(output)
+		File file = new File(saveDirectory, renamedFilename);
+
+		// 기본스트림 - 대상과 연결
+		// 보조스트림 - 기본스트림과 연결, 보조스트림 제어
+		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+				BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());) {
+			byte[] buffer = new byte[8192];
+			int len = 0; // 읽어낸 byte 수
+			while ((len = bis.read(buffer)) != -1) {
+				bos.write(buffer, 0, len); // buffer의 0번지부터 len(읽은 개수)까지 출력
+			}
+		}
+	}
+
 }

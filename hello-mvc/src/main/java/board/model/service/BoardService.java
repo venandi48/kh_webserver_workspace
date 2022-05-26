@@ -47,6 +47,7 @@ public class BoardService {
 
 			// 2. board pk 가져오기
 			int no = boardDao.findCurrentBoardNo(conn); // seq_board_no.currval
+			board.setNo(no);
 			System.out.println("등록된 board.no = " + no);
 
 			// 3. attachment에 등록
@@ -122,6 +123,48 @@ public class BoardService {
 		List<Attachment> attachments = boardDao.findAttachmentByBoardNo(conn, no);
 		close(conn);
 		return attachments;
+	}
+
+	public int updateBoard(BoardExt board) {
+		int result = 0;
+		Connection conn = getConnection();
+		try {
+			// 1. board 테이블 수정
+			result = boardDao.updateBoard(conn, board);
+
+			// 2. attachment 테이블 등록
+			List<Attachment> attachments = ((BoardExt) board).getAttachments();
+			if (attachments != null && !attachments.isEmpty()) {
+				for (Attachment attach : attachments) {
+					result = boardDao.insertAttachment(conn, attach);
+				}
+			}
+
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+		return result;
+	}
+
+	public int deleteAttachment(int no) {
+		int result = 0;
+		Connection conn = getConnection();
+
+		try {
+			result = boardDao.deleteAttachment(conn, no);
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+
+		return result;
 	}
 
 }

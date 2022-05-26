@@ -278,4 +278,39 @@ public class BoardDao {
 		return result;
 	}
 
+	public int updateBoard(Connection conn, BoardExt board) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("updateBoard");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getTitle());
+			pstmt.setString(2, board.getContent());
+			pstmt.setInt(3, board.getNo());
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new BoardException("게시글 수정 오류", e);
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteAttachment(Connection conn, int no) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("deleteAttachment");
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new BoardException("첨부파일 삭제 오류", e);
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
 }
