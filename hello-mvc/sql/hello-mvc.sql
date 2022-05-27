@@ -264,6 +264,7 @@ start with emp_name = '윤은해'
 connect by prior manager_id = emp_id;
 
 commit;
+-- rollback;
 select * from board_comment order by no;
 select * from board order by no desc;
 select * from attachment;

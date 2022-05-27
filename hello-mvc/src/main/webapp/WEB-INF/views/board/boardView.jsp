@@ -132,10 +132,30 @@ boolean canEdit = loginMember != null
     </div>
 </section>
 <%-- @실습문제 - .btn-delete 클릭핸들러를 통해 boardCommentDelFrm 동적으로 전송 --%>
-<form action="" name="boardCommentDelFrm" method="post">
-	<input type="hidden" />
+<form 
+	action="<%= request.getContextPath() %>/board/boardCommentDelete"
+	name="boardCommentDelFrm"
+	method="post">
+	<input type="hidden" name="no" />
+	<input type="hidden" name="boardNo" value="<%= board.getNo() %>"/>
 </form>
 <script>
+const commentDeleteHandler = (e) => {	
+	const no = e.target.value;
+	document.querySelector("[name=boardCommentDelFrm]>[name=no]").value = no;
+	deleteComment();
+};
+
+document.querySelectorAll(".btn-delete").forEach((button)=>{
+	button.onclick = commentDeleteHandler;
+});
+
+const deleteComment = () => {
+	if(confirm("댓글을 삭제하시겠습니까?")){
+		document.boardCommentDelFrm.submit();
+	};
+}; 
+
 // tbody > tr > td >.btn-reply
 document.querySelectorAll(".btn-reply").forEach((button) => {
 	button.onclick = (e) => {
@@ -256,8 +276,8 @@ const loginAlert = () => {
 	const deleteBoard = () => {
 		if(confirm("게시글을 삭제하시겠습니까?")){
 			document.boardDeleteFrm.submit();
-		}
-	};
+		};
+	}; 
 	
 	const updateBoard = () => {
 		location.href = "<%= request.getContextPath() %>/board/boardUpdate?no=<%= board.getNo() %>";

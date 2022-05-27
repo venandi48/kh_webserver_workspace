@@ -181,7 +181,22 @@ public class BoardService {
 		} finally {
 			close(conn);
 		}
-		return 0;
+		return result;
+	}
+
+	public int deleteBoardComment(int no) {
+		int result = 0;
+		Connection conn = getConnection();
+		try {
+			result = boardDao.deleteBoardComment(conn, no);
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+		return result;
 	}
 
 }
