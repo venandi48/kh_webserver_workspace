@@ -6,13 +6,13 @@ import static common.JdbcTemplate.getConnection;
 import static common.JdbcTemplate.rollback;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
 import board.model.dao.BoardDao;
 import board.model.dto.Attachment;
 import board.model.dto.Board;
+import board.model.dto.BoardComment;
 import board.model.dto.BoardExt;
 
 public class BoardService {
@@ -73,7 +73,9 @@ public class BoardService {
 		Connection conn = getConnection();
 		BoardExt board = boardDao.findByNo(conn, no); // board테이블 조회
 		List<Attachment> attachments = boardDao.findAttachmentByBoardNo(conn, no); // attachment테이블 조회
+		List<BoardComment> comments = boardDao.findBoardCommentByBoardNo(conn, no);
 		board.setAttachments(attachments);
+		board.setBoardComments(comments);
 		close(conn);
 		return board;
 	}
@@ -165,6 +167,21 @@ public class BoardService {
 		}
 
 		return result;
+	}
+
+	public int insertBoardComment(BoardComment bc) {
+		int result = 0;
+		Connection conn = getConnection();
+		try {
+			result = boardDao.insertBoardComment(conn, bc);
+			commit(conn);
+		} catch (Exception e) {
+			rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+		return 0;
 	}
 
 }

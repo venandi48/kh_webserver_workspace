@@ -145,7 +145,136 @@ create sequence seq_attachment_no;
 -- 샘플 데이터 추가하기
 
 
+-- 댓글 테이블
+create table board_comment (
+    no number,
+    comment_level number default 1, -- 댓글(1) / 대댓글(2)
+    member_id varchar2(15),
+    content varchar2(2000),
+    board_no number, -- 참조 게시글
+    comment_ref number, -- 대댓글인 경우 참조하는 댓글 no (댓글인 경우 null)
+    reg_date date default sysdate,
+    
+    constraint pk_board_comment_no primary key(no),
+    constraint fk_board_comment_number_id foreign key(member_id) references member(member_id) on delete set null,
+    constraint fk_board_comment_board_no foreign key(board_no) references board(no) on delete cascade,
+    constraint fk_board_comment_ref foreign key(comment_ref) references board_comment(no) on delete cascade
+);
+
+create sequence seq_board_comment_no;
+
+-- 샘플데이터 입력
+-- 댓글
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    default,
+    'sinsa',
+    'def',
+    101,
+    null,
+    default
+);
+
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    default,
+    'admin',
+    '안녕하세요. 관리자입니다.',
+    101,
+    null,
+    default
+);
+
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    default,
+    'qwerty',
+    '시간이 참 빠르네요!',
+    101,
+    null,
+    default
+);
+
+-- 대댓글
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    2,
+    'honggd',
+    'asdfg',
+    101,
+    1,
+    default
+);
+
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    2,
+    'sinsa',
+    'jklmn',
+    101,
+    1,
+    default
+);
+
+insert into board_comment
+values(
+    SEQ_BOARD_COMMENT_NO.nextval,
+    2,
+    'honggd',
+    '무슨 일인가요?',
+    101,
+    2,
+    default
+);
+
+-- 계층형 쿼리
+-- 참조당하는쪽이 부모, 참조하는쪽이 자식
+-- 부모행 no - 댓글
+-- 자식행 comment_ref - 대댓글
+select
+    level,
+    lpad(' ', (level - 1)*5) || bc.content,
+    bc.*
+from board_comment bc
+where board_no = 101
+start with comment_level = 1
+connect by prior no = comment_ref;
+
+-- kh 계정에서 관리자-관리사원정보 계층형 쿼리
+-- 하향식
+select 
+    level,
+    lpad(' ', (level - 1)*5) || e.emp_name
+from employee e
+start with manager_id is null
+connect by manager_id = prior emp_id;
+
+-- 상향식
+select
+    level,
+    lpad(' ', (level - 1)*5) || emp_name
+from employee
+where level > 1
+start with emp_name = '윤은해'
+connect by prior manager_id = emp_id;
+
+commit;
+select * from board_comment order by no;
 select * from board order by no desc;
 select * from attachment;
 
+select
+    level,
+    lpad(' ', (level - 1)*5) || bc.content,
+    bc.*
+from board_comment bc
+where board_no = 101
+start with comment_level = 1 -- 루트행의 조건
+connect by prior no = comment_ref;
 
+select * from board_comment bc where board_no = ? start with comment_level = 1 connect by prior no = comment_ref
