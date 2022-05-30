@@ -47,6 +47,7 @@ public class BoardDao {
 			while (rset.next()) {
 				BoardExt board = handleBoardResultSet(rset);
 				board.setAttachCount(rset.getInt("attach_cnt"));
+				board.setCommentCount(rset.getInt("comment_cnt"));
 				list.add(board);
 			}
 		} catch (Exception e) {

@@ -34,6 +34,10 @@ String pagebar = (String) request.getAttribute("pagebar");
 				<td><%= boardExt.getNo() %></td>
 				<td>
 					<a href="<%= request.getContextPath() %>/board/boardView?no=<%= boardExt.getNo() %>"><%= boardExt.getTitle() %></a>
+					<%-- 댓글수 추가 --%>
+					<% if(boardExt.getCommentCount() > 0) { %>
+						[<%= boardExt.getCommentCount() %>]
+					<% } %>
 				</td>
 				<td><%= boardExt.getMemberId() %></td>
 				<td><%= boardExt.getRegDate() %></td>

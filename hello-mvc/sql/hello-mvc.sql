@@ -278,4 +278,6 @@ where board_no = 101
 start with comment_level = 1 -- 루트행의 조건
 connect by prior no = comment_ref;
 
-select * from board_comment bc where board_no = ? start with comment_level = 1 connect by prior no = comment_ref
+select * from board_comment bc where board_no = ? start with comment_level = 1 connect by prior no = comment_ref;
+
+select * from( select row_number() over(order by reg_date desc) rnum, b.*, (select count(*) from attachment where board_no = b.no)attach_cnt from board b)b where rnum between 50 and 200;

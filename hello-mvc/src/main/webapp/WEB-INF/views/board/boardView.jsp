@@ -154,7 +154,7 @@ const deleteComment = () => {
 	if(confirm("댓글을 삭제하시겠습니까?")){
 		document.boardCommentDelFrm.submit();
 	};
-}; 
+};
 
 // tbody > tr > td >.btn-reply
 document.querySelectorAll(".btn-reply").forEach((button) => {
@@ -214,18 +214,29 @@ document.querySelectorAll(".btn-reply").forEach((button) => {
 		td.append(frm);
 		tr.append(td);
 		
-		console.log(tr);
+		//console.log(tr);
 		
 		// 1. 부모요소 tbody
 		const parent = e.target.parentElement.parentElement.parentElement;
-		console.log(parent); // td -> tr -> tbody
+		//console.log(parent); // td -> tr -> tbody
 		
 		// 2. 기준요소 다음tr태그
 		const ref = e.target.parentElement.parentElement.nextElementSibling;
-		console.log(ref);
+		//console.log(ref);
 		
 		// 생성된 tr 추가
-		parent.insertBefore(tr, ref);
+		//parent.insertBefore(tr, ref);
+		
+		// target.insertAdjacentElement(position, newNode)
+		// 1. beforebegin : target의 이전 형제요소로 추가
+		// 2. afterbegin : target의 시작태그 다음에 자식요소로 추가
+		// 3. beforeend: target의 종료태그 직전에 자식요소로 추가
+		// 4. afterend : target의 다음 형제요소로 추가
+		
+		// insertAdjacentElement방식으로 추가
+		const target = e.target.parentElement.parentElement;
+		console.log(target);
+		target.insertAdjacentElement('afterend', tr);
 		
 		// 이벤트핸들링은 1회만 허용
 		e.target.onclick = null;
