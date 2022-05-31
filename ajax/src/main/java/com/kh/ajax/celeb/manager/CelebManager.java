@@ -17,7 +17,7 @@ public class CelebManager {
 	 * private 생성자이므로 외부에서는 객체생성 불가
 	 */
 	private CelebManager() {
-		celebList.add(new Celeb(1, "draft punk", CelebType.SINGER, "draftpunk.jpg"));
+		celebList.add(new Celeb(1, "draft punk", CelebType.SINGER, "daftpunk.jpg"));
 		celebList.add(new Celeb(2, "hwang", CelebType.COMEDIAN, "hwang.jpg"));
 		celebList.add(new Celeb(3, "줄리아 로버츠", CelebType.ACTOR, "juliaRoberts.jpg"));
 		celebList.add(new Celeb(4, "유재석", CelebType.ENTERTAINER, "dbwotjr.jpg"));

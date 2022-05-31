@@ -8,7 +8,8 @@
 </head>
 <body>
 	<h1>Ajax</h1>
-	
+	<!-- Asynchronous javascript and xml -->
+
 	<h2>XMLHttpRequest</h2>
 	<ul>
 		<li><a href="<%= request.getContextPath() %>/vanilla-js/xmlHttpRequest.jsp">순수 js로 XMLHttpRequest 제어하기</a></li>
@@ -17,6 +18,9 @@
 	<h2>jQuery.ajax</h2>
 	<ul>
 		<li><a href="<%= request.getContextPath() %>/jquery/text.jsp">text</a></li>
+		<li><a href="<%= request.getContextPath() %>/jquery/html.jsp">html</a></li>
+		<li><a href="<%= request.getContextPath() %>/jquery/autoComplete.jsp">autoComplete</a></li>
+		<li><a href="<%= request.getContextPath() %>/jquery/xml.jsp">xml</a></li>
 	</ul>
 
 </body>
