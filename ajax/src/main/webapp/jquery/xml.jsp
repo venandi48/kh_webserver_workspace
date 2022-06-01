@@ -1,3 +1,6 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -127,11 +130,23 @@ table img {width: 100px;}
 	/**
 	 * @ 실습문제 - 페이지로딩이 완료되면 어제 날짜로 박스오피스 조회를 자동으로 처리
 	 */
+	window.onload = () => {
+	<%
+		SimpleDateFormat  sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, -1);
+		date = cal.getTime();
+		String formattedDate = sdf.format(date);
+	%>
+		document.querySelector("#targetDt").value = "<%= formattedDate %>";
+
+		printDailyBoxOffice();
+	}
 	
-	
-	targetDt.addEventListener('change', (e) => {
-		const val = e.target.value.replace(/-/g, "");
-		console.log(val); // yyyy-MM-dd 형식에서 yyyyMMdd로 대체
+	printDailyBoxOffice = () => {
+		const val = document.querySelector("#targetDt").value.replace(/-/g, "");
 		
 		$.ajax({
 			url : "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.xml",
@@ -165,7 +180,9 @@ table img {width: 100px;}
 			},
 			error : console.log
 		});
-	});
+	}
+	
+	targetDt.addEventListener ('change', printDailyBoxOffice);
 	</script>
 
 	<br />
