@@ -143,12 +143,31 @@ table img {width: 100px;}
 				console.log(doc);
 				
 				// doc -> html
+				const root = doc.querySelector(":root");
+				const dailyBoxOfficeList = root.lastChild;
+				const dailyBoxOffice = [...dailyBoxOfficeList.children];
+				console.log(dailyBoxOffice);
+				
+				document.querySelector("#tbl-daily-boxoffice tbody").innerHTML =
+					dailyBoxOffice.reduce((html, movie) => {
+						const rank = movie.getElementsByTagName("rank")[0];
+						const movieNm = movie.getElementsByTagName("movieNm")[0];
+						const audiAcc = movie.getElementsByTagName("audiAcc")[0];
+
+						const tr = `<tr>
+							<td>\${rank.textContent}</td>
+							<td>\${movieNm.textContent}</td>
+							<td>\${audiAcc.textContent}</td>
+						</tr>`;
+
+						return html + tr;
+					}, "");
 			},
 			error : console.log
 		});
 	});
 	</script>
-	
+
 	<br />
 	<br />
 	<br />
