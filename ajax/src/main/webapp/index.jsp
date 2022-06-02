@@ -21,6 +21,7 @@
 		<li><a href="<%= request.getContextPath() %>/jquery/html.jsp">html</a></li>
 		<li><a href="<%= request.getContextPath() %>/jquery/autoComplete.jsp">autoComplete</a></li>
 		<li><a href="<%= request.getContextPath() %>/jquery/xml.jsp">xml</a></li>
+		<li><a href="<%= request.getContextPath() %>/jquery/json.jsp">json</a></li>
 	</ul>
 
 </body>

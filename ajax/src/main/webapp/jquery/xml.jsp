@@ -14,6 +14,19 @@ table {border : 1px solid #000; border-collapse: collapse; margin: 10px 0;}
 th, td {border : 1px solid #000; text-align: center; padding: 3px; }
 table img {width: 100px;}
 </style>
+<script>
+window.addEventListener('load', () => {
+	const today = new Date();
+	console.log(today);
+	const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+	const f = (d) => {
+		const m = (n) => n < 10 ? "0" + n : n;
+		return `\${d.getFullYear()}\${m(d.getMonth() + 1)}\${m(d.getDate())}`
+	};
+	console.log(f(yesterday));
+	printDailyBoxOffice(f(yesterday));
+});
+</script>
 </head>
 <body>
 	<h1>xml</h1>
@@ -130,29 +143,12 @@ table img {width: 100px;}
 	/**
 	 * @ 실습문제 - 페이지로딩이 완료되면 어제 날짜로 박스오피스 조회를 자동으로 처리
 	 */
-	window.onload = () => {
-	<%
-		SimpleDateFormat  sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.DATE, -1);
-		date = cal.getTime();
-		String formattedDate = sdf.format(date);
-	%>
-		document.querySelector("#targetDt").value = "<%= formattedDate %>";
-
-		printDailyBoxOffice();
-	}
-	
-	printDailyBoxOffice = () => {
-		const val = document.querySelector("#targetDt").value.replace(/-/g, "");
-		
+	printDailyBoxOffice = (date) => {
 		$.ajax({
 			url : "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.xml",
 			data : {
 				key : 'a4c7bf4a52f0b3a57befce61f14f4c13',
-				targetDt : val
+				targetDt : date
 			},
 			success(doc){
 				console.log(doc);
@@ -180,9 +176,13 @@ table img {width: 100px;}
 			},
 			error : console.log
 		});
-	}
+	};
 	
-	targetDt.addEventListener ('change', printDailyBoxOffice);
+	targetDt.addEventListener ('change', (e) => {
+		const date = e.target.value.replace(/-/g, "");
+		printDailyBoxOffice(date)
+	});
+	
 	</script>
 
 	<br />
