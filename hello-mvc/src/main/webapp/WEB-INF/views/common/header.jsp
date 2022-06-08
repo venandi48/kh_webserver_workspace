@@ -110,6 +110,7 @@ window.onload = () => {
 	            <li class="notice"><a href="#">공지사항</a></li>
 	            <li class="board"><a href="<%= request.getContextPath() %>/board/boardList">게시판</a></li>
 	            <li class="photo"><a href="<%= request.getContextPath() %>/photo/photoList">사진게시판</a></li>
+	            <li class="chat"><a href="<%= request.getContextPath() %>/chat/chatroom">채팅</a></li>
 	            <% if(loginMember != null && loginMember.getMemberRole() == MemberRole.A) { %>
 	            	<li class="admin"><a href="<%= request.getContextPath() %>/admin/memberList">회원관리</a></li>
 	            <% } %>

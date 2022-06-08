@@ -10,14 +10,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * 
  * jdbc api 사용간에 공통된 처리를 담당하는 static class 모음 클래스
- *
  */
 public class JdbcTemplate {
 
 	static String driverClass; // 드라이버클래스명
-	static String url; // 접속할 db서버주소 (db접속프로토콜@ip:port:sid)
+	static String url; // 접속할 db서버주소
 	static String user;
 	static String password;
 
@@ -26,8 +24,7 @@ public class JdbcTemplate {
 		// datasource.properties에서 설정정보 가져오기
 		Properties prop = new Properties();
 		try {
-			// buildpath의 datasource.properties 참조하기
-			// getResource의 /(슬래시)는 buildpath(/WEB-INF/classes)
+			// buildpath의 datasource.properties 참조
 			String fileName = JdbcTemplate.class.getResource("/datasource.properties").getPath();
 			// System.out.println("fileName@JdbcTemplate = " + fileName);
 			prop.load(new FileReader(fileName));

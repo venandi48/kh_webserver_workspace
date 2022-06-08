@@ -69,7 +69,7 @@ public class AdminMemberListServlet extends HttpServlet {
 			request.setAttribute("list", list);
 			request.setAttribute("pagebar", pagebar);
 			request.getRequestDispatcher("/WEB-INF/views/admin/memberList.jsp")
-				.forward(request, response);;
+				.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
