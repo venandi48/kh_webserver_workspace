@@ -60,7 +60,6 @@ public class MemberLoginServlet extends HttpServlet {
 				// max-age 설정이 없다면, 세션쿠키로 등록. 브라우저 종료 시 폐기
 				// max-age 설정이 있다면, 영속쿠키로 등록. 지정한 시각에 폐기
 				cookie.setMaxAge(7 * 24 * 60 * 60); // 초단위. 일주일 후 폐기
-				
 			} else {
 				cookie.setMaxAge(0); // 0 즉시삭제
 			}

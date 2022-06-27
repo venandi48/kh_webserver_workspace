@@ -329,3 +329,15 @@ select count(*) from photo;
 
 -- 페이징 쿼리
 select * from ( select row_number() over(order by no desc) rnum, p.* from photo p ) p where rnum between 1 and 5;
+
+
+
+select member_id, member_name, member_role,gender, birthday
+from member
+where
+    member_role in ('A', 'U')
+--    member_id like '%na%' and
+--    gender in ('M', 'F') and 
+--    birthday 
+;
+
