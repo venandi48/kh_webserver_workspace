@@ -16,6 +16,12 @@
 		<li><a href="${pageContext.request.contextPath}/standard/main.do">jsp:include</a></li>
 	</ul>
 	<h3>커스텀액션 JSTL</h3>
+	<ul>
+		<li><a href="${pageContext.request.contextPath}/jstl/basic.do">core Basic</a></li>
+		<li><a href="${pageContext.request.contextPath}/jstl/loop.do">core 반복처리</a></li>
+		<li><a href="${pageContext.request.contextPath}/jstl/fmt.do">fmt</a></li>
+		<li><a href="${pageContext.request.contextPath}/jstl/fn.do">fn</a></li>
+	</ul>
 	
 	<h2>EL</h2>
 	<ul>

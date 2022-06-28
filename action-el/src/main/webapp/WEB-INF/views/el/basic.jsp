@@ -11,7 +11,7 @@
 	- header, headerValues(map) 요청헤더
 	- cookie(map)
 	- initParam(map) 초기화파라미터
-	- pageContext(실제참조)
+	- pageContext(실제참조)7
  --%>
 <%
 	pageContext.setAttribute("book", "협상의 기술");
