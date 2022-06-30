@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.student.model.dao.StudentDao;
+import com.kh.student.model.dao.StudentDaoImpl;
 import com.kh.student.model.service.StudentService;
 import com.kh.student.model.service.StudentServiceImpl;
 
@@ -39,7 +41,8 @@ public class DispatcherServlet extends HttpServlet {
 		}
 
 		// 2. urlCommandMap 요소추가 (url - className)
-		StudentService studentService = new StudentServiceImpl(); // controller 주입용 공용 service객체
+		StudentDao studentDao = new StudentDaoImpl();
+		StudentService studentService = new StudentServiceImpl(studentDao); // controller 주입용 공용 service객체
 		Set<String> urls = prop.stringPropertyNames();
 		for (String url : urls) {
 			String className = prop.getProperty(url);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <!--
+  	Content Model 순서를 지켜서 작성해야함!!
+  	Content Model : (properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, objectWrapperFactory?, 
+ 		reflectorFactory?, plugins?, environments?, databaseIdProvider?, mappers?) 
+   -->
+  <properties resource="/datasource.properties"></properties>
+  
+  <settings>
+  	<setting name="jdbcTypeForNull" value="NULL" />
+  	<setting name="mapUnderscoreToCamelCase" value="true" />
+  </settings>
+  
+  <typeAliases>
+  	<!-- <typeAlias type="com.kh.student.model.dto.Student" alias="student"></typeAlias> -->
+  	<package name="com.kh" /> <!-- 해당 패키지 하위 클래스를 모두 자동으로 등록 -->
+  </typeAliases>
+  
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/> <!-- 트랜잭션 관리 책임 JDBC(code로 제어) | MANAGED(tomcat이 처리) -->
+      <dataSource type="POOLED"> <!-- DBCP(Database Connection Pool) 기술 사용할 것을 선언 -->
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers>
+    <mapper resource="/mappers/student/student-mapper.xml"/>
+  </mappers>
+</configuration>

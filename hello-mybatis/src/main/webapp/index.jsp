@@ -10,6 +10,7 @@
 	<h2>student</h2>
 	<ul>
 		<li><a href="<c:url value="/student/studentEnroll.do"/>">학생등록</a></li>
+		<li><a href="<c:url value="/student/student.do"/>">학생조회</a></li>
 	</ul>
 </body>
 </html>

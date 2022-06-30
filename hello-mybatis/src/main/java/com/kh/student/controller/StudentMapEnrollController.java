@@ -1,23 +1,24 @@
 package com.kh.student.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.common.AbstractController;
-import com.kh.student.model.dto.Student;
 import com.kh.student.model.service.StudentService;
 
 /**
  * GET /mybatis/student/studentEnroll.do -> StudentEnrollController
  * POST /mybatis/student/studentEnroll.do -> StudentEnrollController
  */
-public class StudentEnrollController extends AbstractController {
+public class StudentMapEnrollController extends AbstractController {
 	private StudentService studentService;
 	
-	public StudentEnrollController(StudentService studentService) {
+	public StudentMapEnrollController(StudentService studentService) {
 		super();
 		this.studentService = studentService;
 	}
@@ -35,14 +36,16 @@ public class StudentEnrollController extends AbstractController {
 		// 1. 사용자 입력값 처리
 		String name = request.getParameter("name");
 		String tel = request.getParameter("tel");
-		Student student = new Student(0, name, tel, null, null, null);
-		System.out.println("student = " + student);
+		Map<String, Object> studentMap = new HashMap<>();
+		studentMap.put("name", name);
+		studentMap.put("tel", tel);
+		System.out.println("studentMap = " + studentMap);
 	
 		// 2. 업무로직
-		int result = studentService.insertStudent(student);
+		int result = studentService.insertStudent(studentMap);
 		
 		// 사용자 피드백
-		request.getSession().setAttribute("msg", "학생정보 등록성공!");
+		request.getSession().setAttribute("msg", "학생Map정보 등록성공!");
 
 		return "redirect:/student/studentEnroll.do";
 	}
