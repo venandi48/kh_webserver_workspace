@@ -54,7 +54,7 @@ window.addEventListener('load', (e) => {
 		</form>
 		
 		<h1>학생 정보 수정</h1>
-        <form name="studentUpdateFrm">
+        <form name="studentUpdateFrm" method="POST">
             <table class="tbl-student">
                 <tr>
                     <th>학생번호</th>
@@ -76,12 +76,51 @@ window.addEventListener('load', (e) => {
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="수정"/>
+                        <input type="submit" value="수정" />
                         <input type="button" value="삭제" onclick="deleteStudent();" />
                     </td>
                 </tr>
             </table>
         </form>
 	</div>
+	<script>
+	document.studentUpdateFrm.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const frm = e.target;
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/student/studentUpdate.do",
+			method: "POST",
+			data: {
+				no: frm.no.value,
+				name: frm.name.value,
+				tel: frm.tel.value
+			},
+			success(resp){
+				alert("학생정보를 수정하였습니다.");
+			},
+			error: console.log
+		});
+	});
+	
+	const deleteStudent = () => {
+		if(!confirm("정말 삭제하시겠습니까?")){
+			return;
+		}
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/student/studentDelete.do",
+			method: "POST",
+			data: {
+				no: studentUpdateFrm.no.value
+			},
+			success(resp){
+				alert("학생정보를 삭제하였습니다.");
+				location.href = "${pageContext.request.contextPath}/student/student.do"
+			},
+			error: console.log
+		});
+	};
+	</script>
 </body>
 </html>

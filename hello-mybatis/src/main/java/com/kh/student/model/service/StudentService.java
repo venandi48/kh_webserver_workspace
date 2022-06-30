@@ -16,4 +16,8 @@ public interface StudentService {
 
 	Map<String, Object> selectOneMap(int no);
 
+	int updateStudent(Student student);
+
+	int deleteStudent(int no);
+
 }
