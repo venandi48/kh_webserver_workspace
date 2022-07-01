@@ -2,7 +2,7 @@ package com.kh.common;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.student.model.dao.StudentDao;
+import com.kh.emp.model.dao.EmpDaoImpl;
+import com.kh.emp.model.service.EmpService;
+import com.kh.emp.model.service.EmpServiceImpl;
 import com.kh.student.model.dao.StudentDaoImpl;
 import com.kh.student.model.service.StudentService;
 import com.kh.student.model.service.StudentServiceImpl;
@@ -28,8 +30,7 @@ public class DispatcherServlet extends HttpServlet {
 	// key = url-pattern, value = controller객체(AbstractController자식타입)
 	private Map<String, AbstractController> urlCommandMap = new HashMap<>();
        
-	public DispatcherServlet() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public DispatcherServlet() throws Exception {
 
 		// 1. urlCommand.properties load -> prop
     	Properties prop = new Properties();
@@ -41,16 +42,31 @@ public class DispatcherServlet extends HttpServlet {
 		}
 
 		// 2. urlCommandMap 요소추가 (url - className)
-		StudentDao studentDao = new StudentDaoImpl();
-		StudentService studentService = new StudentServiceImpl(studentDao); // controller 주입용 공용 service객체
+		StudentService studentService = new StudentServiceImpl(new StudentDaoImpl()); // controller 주입용 공용 service객체
+		EmpService empService = new EmpServiceImpl(new EmpDaoImpl());
+		
 		Set<String> urls = prop.stringPropertyNames();
 		for (String url : urls) {
 			String className = prop.getProperty(url);
 
 			// reflection api를 사용해 new 연산자 없이 객체 생성
 			Class<?> clz = Class.forName(className);
-			Class<?>[] param = {StudentService.class};
-			AbstractController controller = (AbstractController) clz.getDeclaredConstructor(param).newInstance(studentService);
+			
+			Class<?>[] param = new Class<?>[1]; // 생성자 조회용 클래스 객체배열
+			Object[] args = new Object[1]; // 생성자 호출시 전달할 인자배열
+			
+			// pakage별 분기처리
+			if(url.startsWith("/student")) {
+				param[0] = StudentService.class;
+				args[0] = studentService;
+			}
+			else if(url.startsWith("/emp")) {
+				param[0] = EmpService.class;
+				args[0] = empService;
+			}
+			
+			Constructor<?> constructor = clz.getDeclaredConstructor(param);
+			AbstractController controller = (AbstractController) constructor.newInstance(args[0]);
 			urlCommandMap.put(url, controller);
 		}
 		System.out.println("urlCommandMap = " + urlCommandMap);

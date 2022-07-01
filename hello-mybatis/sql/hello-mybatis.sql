@@ -32,3 +32,42 @@ select * from student where (deleted_at is null); -- 삭제처리행 제외하�
 
 
 commit;
+
+-- web -> kh계정의 테이블 접근
+-- kh계정에서 테이블 읽기 권한 부여
+grant select on employee to web;
+grant select on department to web;
+grant select on job to web;
+
+
+select * from kh.employee;
+select * from kh.department;
+select * from kh.job;
+
+
+-- system계정에서 create synonym 권한 부여
+grant create synonym to web;
+
+-- 동의어(synonym) 생성
+create synonym emp for kh.employee;
+create synonym dept for kh.department;
+create synonym job for kh.job;
+
+-- 동의어로 조회
+select * from emp;
+select * from dept;
+select * from job;
+
+select *
+from (
+    select
+        e.*,
+        decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender
+    from emp e
+) e
+where
+    1 = 1 
+    and email like '%a%'
+    and gender = '여'
+;
+

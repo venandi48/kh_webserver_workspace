@@ -1,6 +1,8 @@
 package com.kh.student.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,10 @@ public class StudentUpdateController extends AbstractController {
 		int result = studentService.updateStudent(student);
 		
 		response.setContentType("application/json; charset=utf-8");
-		new Gson().toJson(student, response.getWriter());
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", "정상적으로 수정되었습니다.");
+		map.put("student", studentService.selectOne(no));
+		new Gson().toJson(map, response.getWriter());
 
 		return null;
 	}

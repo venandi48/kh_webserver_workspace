@@ -30,6 +30,9 @@
   	<id column="no" property="no"/> <!-- pk컬럼 전용 -->
   	<result column="NAME" property="name" />
   	<result column="TEL" property="tel" />
+  	<result column="created_at" property="createdAt" />
+  	<result column="updated_at" property="updatedAt" />
+  	<result column="deleted_at" property="deletedAt" />
   </resultMap>
 
   <!-- DML인 경우 resultType속성 작성X -->
@@ -61,14 +64,26 @@
   		tel = #{tel},
   		updated_at = sysdate
   	where
-  		deleted_at is null
-  		and 
   		no = #{no}
   </update>
   
-  <delete id="deleteStudent" parameterType="_int">
-  	update student 
-	set deleted_at = sysdate 
+  <update id="deleteStudent" parameterType="_int">
+  	update student
+	set deleted_at = sysdate
 	where no = #{no}
-  </delete>
+  </update>
+  
+  <!-- selectList처리시에도 resultType에는 하나의 레코드에 대한 타입을 작성해야 한다.  -->
+  <select id="selectStudentList" resultType="student">
+  	select *
+  	from student
+  	where deleted_at is null
+  </select>
+  
+  <select id="studentMapList" resultMap="studentMap">
+    select *
+  	from student
+  	where deleted_at is null
+  </select>
+  
 </mapper>

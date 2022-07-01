@@ -87,23 +87,29 @@ window.addEventListener('load', (e) => {
 	document.studentUpdateFrm.addEventListener('submit', (e) => {
 		e.preventDefault();
 		const frm = e.target;
+		const no = frm.no.value;
+		if(!no) return;
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/student/studentUpdate.do",
 			method: "POST",
 			data: {
-				no: frm.no.value,
+				no,
 				name: frm.name.value,
 				tel: frm.tel.value
 			},
 			success(resp){
-				alert("학생정보를 수정하였습니다.");
+				const {msg} = resp;
+				alert(msg);
 			},
 			error: console.log
 		});
 	});
 	
 	const deleteStudent = () => {
+		const no = document.studentUpdateFrm.no.value;
+		if(!no) return;
+		
 		if(!confirm("정말 삭제하시겠습니까?")){
 			return;
 		}
@@ -111,11 +117,10 @@ window.addEventListener('load', (e) => {
 		$.ajax({
 			url: "${pageContext.request.contextPath}/student/studentDelete.do",
 			method: "POST",
-			data: {
-				no: studentUpdateFrm.no.value
-			},
+			data: {no},
 			success(resp){
-				alert("학생정보를 삭제하였습니다.");
+				const {msg} = resp;
+				alert(msg);
 				location.href = "${pageContext.request.contextPath}/student/student.do"
 			},
 			error: console.log

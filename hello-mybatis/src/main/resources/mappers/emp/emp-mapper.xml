@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+	<resultMap type="map" id="empMap">
+		<id column="emp_id" property="empId" />
+		<result column="emp_name" property="empName"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="email" property="email"/>
+		<result column="phone" property="phone"/>
+		<result column="dept_code" property="deptCode"/>
+		<result column="job_code" property="jobCode"/>
+		<result column="sal_level" property="salLevel"/>
+		<result column="salary" property="salary"/>
+		<result column="bonus" property="bonus"/>
+		<result column="manager_id" property="managerId"/>
+		<result column="hire_date" property="hireDate"/>
+		<result column="quit_date" property="quitDate"/>
+		<result column="quit_yn" property="quitYn"/>
+		<result column="gender" property="gender"/>
+	</resultMap>
+	
+	<select id="selectList" resultMap="empMap">
+		select *
+		from emp
+		order by emp_id
+	</select>
+	
+	<!-- 식별자(테이블명, 컬럼명)는 ${}로 표현 -->
+	<select id="search1" parameterType="map" resultMap="empMap">
+		select 
+			*
+		from 
+			emp
+		where 
+			${searchType} like '%' || #{searchKeyword} || '%'
+	</select>
+	
+	<select id="search2" parameterType="map" resultMap="empMap">
+		select *
+		from (
+		    select
+		        e.*,
+		        decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender
+		    from emp e
+			) e
+		where
+		    1 = 1 
+		    <if test="searchType != null and searchType != '' 
+		    	and searchKeyword != null and searchKeyword != '' ">
+		    and ${searchType} like '%' || #{searchKeyword} || '%'
+		    </if>
+		    <if test="gender != null">
+		    and gender = #{gender}
+		    </if>
+	</select>
+</mapper>
