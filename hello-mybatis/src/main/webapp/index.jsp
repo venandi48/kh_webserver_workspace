@@ -18,6 +18,7 @@
 	<ul>
 		<li><a href="<c:url value="/emp/search1.do"/>">동적쿼리 - 컬럼명</a></li>
 		<li><a href="<c:url value="/emp/search2.do"/>">동적쿼리 - 분기처리</a></li>
+		<li><a href="<c:url value="/emp/search3.do"/>">동적쿼리 - 반복처리</a></li>
 	</ul>
 </body>
 </html>

@@ -71,3 +71,10 @@ where
     and gender = '여'
 ;
 
+-- empUpdate
+-- web emp테이블 수정권한 부여
+-- 관리자 또는 테이블주인 계정에서 update권한 부여
+grant update on employee to web;
+grant update on department to web;
+grant update on job to web;
+

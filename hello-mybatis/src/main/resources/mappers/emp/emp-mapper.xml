@@ -3,24 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="emp">
-	<resultMap type="map" id="empMap">
-		<id column="emp_id" property="empId" />
-		<result column="emp_name" property="empName"/>
-		<result column="emp_no" property="empNo"/>
-		<result column="email" property="email"/>
-		<result column="phone" property="phone"/>
-		<result column="dept_code" property="deptCode"/>
-		<result column="job_code" property="jobCode"/>
-		<result column="sal_level" property="salLevel"/>
-		<result column="salary" property="salary"/>
-		<result column="bonus" property="bonus"/>
-		<result column="manager_id" property="managerId"/>
-		<result column="hire_date" property="hireDate"/>
-		<result column="quit_date" property="quitDate"/>
-		<result column="quit_yn" property="quitYn"/>
-		<result column="gender" property="gender"/>
-	</resultMap>
-	
 	<select id="selectList" resultMap="empMap">
 		select *
 		from emp
@@ -37,6 +19,7 @@
 			${searchType} like '%' || #{searchKeyword} || '%'
 	</select>
 	
+	<!-- 
 	<select id="search2" parameterType="map" resultMap="empMap">
 		select *
 		from (
@@ -55,4 +38,135 @@
 		    and gender = #{gender}
 		    </if>
 	</select>
+	 -->
+	
+	<select id="search2" parameterType="map" resultMap="empMap">
+		select *
+		from (
+		    select
+		        e.*,
+		        decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender
+		    from emp e
+			) e
+
+		<!-- 
+			where
+			 - and/or로 시작하는 경우 첫 and/or를 제거
+			 - where태그 몸통이 비어있는 경우, where키워드도 제거
+		 -->
+		<where>
+		    <if test="searchType != null and searchType != '' 
+		    	and searchKeyword != null and searchKeyword != '' ">
+		    ${searchType} like '%' || #{searchKeyword} || '%'
+		    </if>
+		    <if test="gender != null">
+		    and gender = #{gender}
+		    </if>
+		</where>
+	</select>
+	
+	<select id="selectJobList" resultMap="jobMap">
+		select
+			*
+		from
+			job
+	</select>
+	
+	<resultMap type="map" id="jobMap">
+		<id column="job_code" property="jobCode" />
+		<result column="job_name" property="jobName" />
+	</resultMap>
+	
+	<select id="search3" resultMap="empMap">
+		select
+			e.*,
+			(select job_name from job where job_code = e.job_code) job_name,
+			(select dept_title from dept where dept_id = e.dept_code) dept_title
+		from
+			emp e
+		<where>
+			<if test="jobCodes != null">
+				job_code in
+				<foreach collection="jobCodes" item="jobCode" open="(" close=")" separator=",">
+				#{jobCode}
+				</foreach>
+			</if>
+			<if test="deptCodeList != null">
+				and nvl(dept_code, 'D0') in
+				<foreach collection="deptCodeList" item="deptCode" open="(" close=")" separator=",">
+				#{deptCode}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<!--
+		collection
+		 - 반복접근할 객체 property명, key값 작성.
+		 - 배열, 컬렉션
+		item
+		 - 요소 하나를 담을 변수명
+		open : 시작할 때 한번 출력되는 값
+		close : 끝날 때 한번 출력되는 값
+		seperator : 반복 사이 구분자
+	 -->
+	 
+	<select id="selectDeptList" resultMap="deptMap">
+		select *
+		from dept
+	</select>
+	 
+	<resultMap type="map" id="deptMap">
+		<id column="dept_id" property="deptId"/>
+		<result column="dept_title" property="deptTitle"/>
+	</resultMap>
+	
+	<select id="selectOne" parameterType="_int" resultMap="empMap">
+		select
+			*
+		from 
+			emp e
+				left join dept d
+					on e.dept_code = d.dept_id
+				left join job j
+					on e.job_code = j.job_code
+		where
+			emp_id = #{empId}
+	</select>
+	
+	<!-- set태그는 나열된 설정 구문의 마지막 ,(콤마)를 제거 -->
+	<update id="updateEmp">
+		update
+			emp
+		<set>
+			<if test="jobCode != null">
+				job_code = #{jobCode},
+			</if>
+			<if test="deptCode != null">
+				dept_code = #{deptCode}
+			</if>
+		</set>
+		where
+			emp_id = #{empId}
+	</update>
+	
+	<resultMap type="map" id="empMap">
+		<id column="emp_id" property="empId" />
+		<result column="emp_name" property="empName"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="email" property="email"/>
+		<result column="phone" property="phone"/>
+		<result column="dept_code" property="deptCode"/>
+		<result column="job_code" property="jobCode"/>
+		<result column="sal_level" property="salLevel"/>
+		<result column="salary" property="salary"/>
+		<result column="bonus" property="bonus"/>
+		<result column="manager_id" property="managerId"/>
+		<result column="hire_date" property="hireDate"/>
+		<result column="quit_date" property="quitDate"/>
+		<result column="quit_yn" property="quitYn"/>
+		<result column="gender" property="gender"/>
+		<result column="job_name" property="jobName"/>
+		<result column="dept_title" property="deptTitle"/>
+	</resultMap>
+	
 </mapper>
